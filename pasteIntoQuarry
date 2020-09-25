@@ -1,0 +1,152 @@
+computer = require("computer")
+robot = require("robot")
+component = require("component")
+ic = component.inventory_controller
+ 
+leftTurn = true
+MAX_ENERGY = 40500
+ 
+function getVariables()
+    print("Enter how far you wan to mine out for x, y, and z."
+    x = io.read("*n") - 1
+    y = io.read("*n")
+    z = io.read("*n")
+end
+ 
+function mineAndMove()
+    if robot.detect() == true
+    then
+        robot.swing()
+        robot.forward()
+    else
+        robot.forward()
+    end
+end
+ 
+function mineAndMoveUp()
+    if robot.detectUp() == true
+    then
+        robot.swingUp()
+        robot.up()
+    else
+        robot.up()
+    end
+end
+ 
+function mineALine()
+    for i=1,x,1
+    do
+    mineAndMove()
+    end
+end
+ 
+function makeASquare()
+    for i=1,z-1,1
+    do
+        mineALine()
+        changeALine()
+    end
+    mineALine()
+end
+ 
+function mineASphere()
+    currentYLevel = 0
+    while currentYLevel < y
+    do
+        makeASquare()
+        returnToStart()
+        powerCheck()
+        inventoryCheck()
+        mineAndMoveUp()
+        currentYLevel = currentYLevel + 1
+        leftTurn = true
+    end
+end
+ 
+function changeLine()
+    if leftTurn == true
+    then
+        robot.turnLeft()
+        mineAndMove()
+        robot.turnLeft()
+        leftTurn = false
+    else
+        robot.turnRight()
+        mineAndMove()
+        robot.turnRight()
+        leftTurn = true
+    end
+end
+ 
+function returnToStart()
+    if z % 2 == 0
+    then
+        robot.turnLeft()
+        for i=1,x,1
+        do
+            mineAndMove()
+        end
+        robot.turnLeft()
+    else
+        robot.turnRight()
+        robot.turnRight()
+        for i=1,z-1,1
+        do
+            robot.forward()
+        end
+        robot.turnLeft()
+        for i=1,x,1
+        do
+            mineAndMove()
+        end
+        robot.turnLeft()
+    end
+end
+ 
+function inventoryCheck()
+    for i=1,currentYLevel,1
+    do
+        robot.down()
+    end
+    robot.back()
+    print("Moving items...")
+    for i=1,16,1
+    do
+        robot.select(i)
+        ic.dropIntoSlot(0,i,64)
+    end
+    print("Inventory empty!")
+        robot.forward()
+    for i=1,currentYLevel,1
+    do
+        robot.up()
+    end
+end
+ 
+function powerCheck()
+    if (computer.energy() / MAX_ENERGY) < .40
+    then
+        for i=1,currentYLevel,1
+        do
+            robot.down()
+        end
+        robot.back()
+        repeat
+            print("Charging...")
+        until computer.energy() == MAX_ENERGY
+        print("Charged!")
+        robot.forward()
+        for i=1,currentYLevel,1
+        do
+            robot.up()
+        end
+    end
+end
+ 
+getVariables()
+mineAndMove()
+mineASphere()
+for i=1,currentYLevel,1
+do
+    robot.down()
+end
