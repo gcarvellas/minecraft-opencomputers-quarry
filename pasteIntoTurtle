@@ -44,7 +44,7 @@ function makeASquare()
     for i=1,z-1,1
     do
         mineALine()
-        changeALine()
+        changeLine()
     end
     mineALine()
 end
