@@ -7,7 +7,7 @@ leftTurn = true
 MAX_ENERGY = 40500
  
 function getVariables()
-    print("Enter how far you wan to mine out for x, y, and z."
+    print("Enter how far you want to mine out for x, y, and z.")
     x = io.read("*n") - 1
     y = io.read("*n")
     z = io.read("*n")
