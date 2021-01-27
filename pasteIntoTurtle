@@ -90,12 +90,12 @@ function returnToStart()
     else
         robot.turnRight()
         robot.turnRight()
-        for i=1,z-1,1
+        for i=1,x,1
         do
             robot.forward()
         end
         robot.turnLeft()
-        for i=1,x,1
+        for i=1,z-1,1
         do
             mineAndMove()
         end
