@@ -1,3 +1,5 @@
+# This project is for personal use and is now read-only
+
 # Notes:
 
 -this code is supposed to be for a minecraft opencomputers turtle, where the turtle has level-3 specifications, inventory upgrade, max flight upgrade, etc.
